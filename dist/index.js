@@ -15030,10 +15030,18 @@ var run = async (dataCollector = createDataCollector()) => {
     dataCollector.add(baseCoverage2);
   }
   console.log("base coverage added");
+  if (dataCollector.get().errors.length > 0) {
+    console.log("failing after base coverage");
+    console.log(dataCollector.get().errors);
+  }
   const [isReportContentGenerated, summaryReport] = await runStage("generateReportContent", dataCollector, async () => {
     return createReport(dataCollector, options);
   });
   console.log("report created");
+  if (dataCollector.get().errors.length > 0) {
+    console.log("failing after report created");
+    console.log(dataCollector.get().errors);
+  }
   await runStage("publishReport", dataCollector, async (skip) => {
     if (!isReportContentGenerated) {
       skip();
@@ -15046,6 +15054,10 @@ var run = async (dataCollector = createDataCollector()) => {
     }
   });
   console.log("report published");
+  if (dataCollector.get().errors.length > 0) {
+    console.log("failing after report publishing");
+    console.log(dataCollector.get().errors);
+  }
   await runStage("failedTestsAnnotations", dataCollector, async (skip) => {
     if (!isHeadCoverageGenerated || !["all", "failed-tests"].includes(options.annotations)) {
       skip();
@@ -15058,6 +15070,10 @@ var run = async (dataCollector = createDataCollector()) => {
     await octokit.checks.create(formatFailedTestsAnnotations(summaryReport.runReport, failedAnnotations));
   });
   console.log("failed test annotations");
+  if (dataCollector.get().errors.length > 0) {
+    console.log("failing after test annotations");
+    console.log(dataCollector.get().errors);
+  }
   await runStage("coverageAnnotations", dataCollector, async (skip) => {
     if (!isHeadCoverageGenerated || !["all", "coverage"].includes(options.annotations)) {
       skip();

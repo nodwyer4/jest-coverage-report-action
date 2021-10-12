@@ -96,6 +96,11 @@ export const run = async (
     }
 
     console.log("base coverage added")
+    if (dataCollector.get().errors.length > 0) {
+        console.log("failing after base coverage")
+        console.log(dataCollector.get().errors);
+    }
+
 
     const [isReportContentGenerated, summaryReport] = await runStage(
         'generateReportContent',
@@ -106,7 +111,10 @@ export const run = async (
     );
 
     console.log("report created")
-
+    if (dataCollector.get().errors.length > 0) {
+        console.log("failing after report created")
+        console.log(dataCollector.get().errors);
+    }
 
     await runStage('publishReport', dataCollector, async (skip) => {
         if (!isReportContentGenerated) {
@@ -133,6 +141,10 @@ export const run = async (
     });
 
     console.log("report published");
+    if (dataCollector.get().errors.length > 0) {
+        console.log("failing after report publishing")
+        console.log(dataCollector.get().errors);
+    }
 
     await runStage('failedTestsAnnotations', dataCollector, async (skip) => {
         if (
@@ -158,6 +170,10 @@ export const run = async (
     });
 
     console.log("failed test annotations")
+    if (dataCollector.get().errors.length > 0) {
+        console.log("failing after test annotations")
+        console.log(dataCollector.get().errors);
+    }
 
     await runStage('coverageAnnotations', dataCollector, async (skip) => {
         if (
