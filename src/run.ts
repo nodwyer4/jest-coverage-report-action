@@ -39,7 +39,6 @@ export const run = async (
             return await getCoverage(
                 dataCollector,
                 options,
-                false,
                 options.coverageFile
             );
         }
@@ -86,7 +85,6 @@ export const run = async (
             return await getCoverage(
                 ignoreCollector,
                 options,
-                true,
                 options.baseCoverageFile
             );
         }

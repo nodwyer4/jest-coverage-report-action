@@ -16,13 +16,12 @@ import { runStage } from '../utils/runStage';
 export const getCoverage = async (
     dataCollector: DataCollector<JsonReport>,
     options: Options,
-    runAll: boolean,
     coverageFilePath: string | undefined
 ): Promise<JsonReport> => {
     await runStage('install', dataCollector, async (skip) => {
         if (
             coverageFilePath ||
-            (!runAll && !shouldInstallDeps(options.skipStep))
+            (!shouldInstallDeps(options.skipStep))
         ) {
             skip();
         }
@@ -36,7 +35,7 @@ export const getCoverage = async (
     await runStage('runTest', dataCollector, async (skip) => {
         if (
             coverageFilePath ||
-            (!runAll && !shouldRunTestScript(options.skipStep))
+            (!shouldRunTestScript(options.skipStep))
         ) {
             skip();
         }
