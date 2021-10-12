@@ -14412,8 +14412,11 @@ var parseDetails = (jsonReport) => {
 
 // src/format/summary/getSummary.ts
 var getSummary = (map, totalCounter, coveredCounter, title) => {
-  const total = Object.values(map).reduce((acc, currValue) => acc + totalCounter(currValue), 0);
-  const covered = Object.values(map).reduce((acc, currValue) => acc + coveredCounter(currValue), 0);
+  let total = 0, covered = 0;
+  if (map) {
+    total = Object.values(map).reduce((acc, currValue) => acc + totalCounter(currValue), 0);
+    covered = Object.values(map).reduce((acc, currValue) => acc + coveredCounter(currValue), 0);
+  }
   return {
     title,
     total,
