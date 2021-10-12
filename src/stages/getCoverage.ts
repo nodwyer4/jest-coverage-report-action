@@ -54,7 +54,7 @@ export const getCoverage = async (
             )
     );
 
-    console.log("coverage collected", isCoverageCollected, rawCoverage);
+    console.log("coverage collected", isCoverageCollected);
 
     const [coverageParsed, jsonReport] = await runStage(
         'parseCoverage',
@@ -70,7 +70,7 @@ export const getCoverage = async (
         }
     );
 
-    console.log(coverageParsed, jsonReport);
+    console.log("Coverage Parsed:", coverageParsed);
 
     if (!coverageParsed || !jsonReport) {
         throw new ActionError(FailReason.FAILED_GETTING_COVERAGE);

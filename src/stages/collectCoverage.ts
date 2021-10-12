@@ -34,8 +34,6 @@ export const collectCoverage = async (
 
         const outBuff = await readFile(pathToCoverageFile);
 
-        console.log(outBuff.toString());
-
         return outBuff.toString();
     } catch (err) {
         if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
