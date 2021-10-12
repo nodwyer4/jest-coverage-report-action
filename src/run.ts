@@ -13,6 +13,7 @@ import { switchBranch } from './stages/switchBranch';
 import { JsonReport } from './typings/JsonReport';
 import { getOptions, shouldRunTestScript } from './typings/Options';
 import { createDataCollector } from './utils/DataCollector';
+import { getConsoleLink } from './utils/getConsoleLink';
 import { i18n } from './utils/i18n';
 import { runStage } from './utils/runStage';
 
@@ -54,6 +55,7 @@ export const run = async (
         !options.baseCoverageFile &&
         shouldRunTestScript(options.skipStep)
     ) {
+        console.log("switching to base");
         ([isSwitched] = await runStage(
             'switchToBase',
             dataCollector,
@@ -67,6 +69,8 @@ export const run = async (
                 await switchBranch(baseBranch);
             }
         ));
+    } else {
+        console.log("Staying on branch");
     }
 
     const ignoreCollector = createDataCollector<JsonReport>();

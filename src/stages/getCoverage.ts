@@ -71,6 +71,8 @@ export const getCoverage = async (
         }
     );
 
+    console.log(coverageParsed, jsonReport);
+
     if (!coverageParsed || !jsonReport) {
         throw new ActionError(FailReason.FAILED_GETTING_COVERAGE);
     }
