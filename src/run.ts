@@ -11,7 +11,7 @@ import { createReport } from './stages/createReport';
 import { getCoverage } from './stages/getCoverage';
 import { switchBranch } from './stages/switchBranch';
 import { JsonReport } from './typings/JsonReport';
-import { getOptions } from './typings/Options';
+import { getOptions, shouldRunTestScript } from './typings/Options';
 import { createDataCollector } from './utils/DataCollector';
 import { i18n } from './utils/i18n';
 import { runStage } from './utils/runStage';
@@ -48,19 +48,26 @@ export const run = async (
         dataCollector.add(headCoverage);
     }
 
-    const [isSwitched] = await runStage(
-        'switchToBase',
-        dataCollector,
-        async (skip) => {
-            const baseBranch = context.payload.pull_request?.base.ref;
+    let isSwitched = true;
 
-            if (!isInPR || !baseBranch) {
-                skip();
+    if (
+        !options.baseCoverageFile &&
+        shouldRunTestScript(options.skipStep)
+    ) {
+        ([isSwitched] = await runStage(
+            'switchToBase',
+            dataCollector,
+            async (skip) => {
+                const baseBranch = context.payload.pull_request?.base.ref;
+    
+                if (!isInPR || !baseBranch) {
+                    skip();
+                }
+    
+                await switchBranch(baseBranch);
             }
-
-            await switchBranch(baseBranch);
-        }
-    );
+        ));
+    }
 
     const ignoreCollector = createDataCollector<JsonReport>();
 
