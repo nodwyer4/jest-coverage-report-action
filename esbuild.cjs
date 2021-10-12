@@ -2,7 +2,7 @@
 const { build } = require('esbuild');
 build({
     bundle: true,
-    minify: true,
+    minify: false,
     platform: 'node',
     entryPoints: ['src/index.ts'],
     outfile: 'dist/index.js',
