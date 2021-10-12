@@ -55,6 +55,8 @@ export const getCoverage = async (
             )
     );
 
+    console.log("coverage collected", isCoverageCollected, rawCoverage);
+
     const [coverageParsed, jsonReport] = await runStage(
         'parseCoverage',
         dataCollector,
