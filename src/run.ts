@@ -90,9 +90,12 @@ export const run = async (
         }
     );
 
+    console.log("adding base coverage")
     if (baseCoverage) {
         dataCollector.add(baseCoverage);
     }
+
+    console.log("base coverage added")
 
     const [isReportContentGenerated, summaryReport] = await runStage(
         'generateReportContent',
@@ -101,6 +104,9 @@ export const run = async (
             return createReport(dataCollector, options);
         }
     );
+
+    console.log("report created")
+
 
     await runStage('publishReport', dataCollector, async (skip) => {
         if (!isReportContentGenerated) {
@@ -126,6 +132,8 @@ export const run = async (
         }
     });
 
+    console.log("report published");
+
     await runStage('failedTestsAnnotations', dataCollector, async (skip) => {
         if (
             !isHeadCoverageGenerated ||
@@ -149,6 +157,8 @@ export const run = async (
         );
     });
 
+    console.log("failed test annotations")
+
     await runStage('coverageAnnotations', dataCollector, async (skip) => {
         if (
             !isHeadCoverageGenerated ||
@@ -169,7 +179,10 @@ export const run = async (
         );
     });
 
+    console.log("coverage annotations")
+
     if (dataCollector.get().errors.length > 0) {
+        console.log(dataCollector.get().errors);
         setFailed(i18n('failed'));
     }
 };
