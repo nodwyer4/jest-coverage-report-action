@@ -1,5 +1,8 @@
 import { context } from '@actions/github';
 
+import fs from "fs";
+import { URL } from 'url';
+
 import { getReportTag } from '../constants/getReportTag';
 import { formatCoverage } from '../format/formatCoverage';
 import { formatErrors } from '../format/formatErrors';
@@ -24,6 +27,15 @@ export const createReport = (
     options: Options
 ): SummaryReport => {
     const { workingDirectory, customTitle } = options;
+
+    if (workingDirectory !== undefined) {
+        console.log(workingDirectory);
+        fs.readdir(workingDirectory, (err, files) => {
+            files.forEach(file => {
+              console.log(file);
+            });
+          });
+    } 
 
     const { errors, data } = dataCollector.get();
     const [headReport, baseReport] = data;
